@@ -60,8 +60,8 @@ async def info(ctx):
     await ctx.send(embed=embed)
 
 
-@bot.command(name="help")
-async def help_command(ctx):
+@bot.command(name="commands")
+async def commands_list(ctx):
     """Display available bot commands."""
     embed = discord.Embed(
         title="Bot Commands",
@@ -70,7 +70,7 @@ async def help_command(ctx):
     )
     embed.add_field(name="!ping", value="Check bot latency", inline=False)
     embed.add_field(name="!info", value="Display bot information", inline=False)
-    embed.add_field(name="!help", value="Show this help message", inline=False)
+    embed.add_field(name="!commands", value="Show this message", inline=False)
     await ctx.send(embed=embed)
 
 
