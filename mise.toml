@@ -1,9 +1,0 @@
-# Mise configuration for Railway Railpack
-# This is an alternative to .python-version for more complex setups
-
-[tools]
-python = "3.11"
-
-# Uncomment below if you need additional tools:
-# poetry = "1.7"
-# ffmpeg = "6.0"
