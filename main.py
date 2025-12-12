@@ -60,6 +60,20 @@ async def info(ctx):
     await ctx.send(embed=embed)
 
 
+@bot.command(name="help")
+async def help_command(ctx):
+    """Display available bot commands."""
+    embed = discord.Embed(
+        title="Bot Commands",
+        description="Available commands for this Discord bot",
+        color=discord.Color.green()
+    )
+    embed.add_field(name="!ping", value="Check bot latency", inline=False)
+    embed.add_field(name="!info", value="Display bot information", inline=False)
+    embed.add_field(name="!help", value="Show this help message", inline=False)
+    await ctx.send(embed=embed)
+
+
 def main():
     """Main entry point for the bot."""
     token = os.environ.get("DISCORD_TOKEN")
