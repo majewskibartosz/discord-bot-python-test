@@ -1,0 +1,9 @@
+# Discord Bot Dependencies
+# 
+# Using py-cord which has the audioop dependency chain.
+# On Python 3.13, this will cause: ModuleNotFoundError: No module named 'audioop'
+#
+# To fix on Python 3.13, uncomment the audioop-lts line below:
+# audioop-lts
+
+py-cord>=2.4.0

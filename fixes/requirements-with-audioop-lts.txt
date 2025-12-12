@@ -1,0 +1,7 @@
+# Discord Bot Dependencies
+# 
+# This version uses audioop-lts to support Python 3.13
+# The audioop-lts package backports the removed audioop module
+
+py-cord>=2.4.0
+audioop-lts
