@@ -1,9 +1,10 @@
-# Discord Bot Dependencies
+# Stoic Quote Discord Bot Dependencies
 # 
-# Using py-cord which has the audioop dependency chain.
-# On Python 3.13, this will cause: ModuleNotFoundError: No module named 'audioop'
+# Using py-cord for Discord API
+# Using aiohttp for async HTTP requests to the Stoic Quotes API
 #
-# To fix on Python 3.13, uncomment the audioop-lts line below:
+# Note: On Python 3.13, you may need audioop-lts (uncomment below):
 # audioop-lts
 
 py-cord>=2.4.0
+aiohttp>=3.9.0
