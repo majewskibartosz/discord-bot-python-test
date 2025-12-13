@@ -16,7 +16,7 @@ import os
 import random
 import aiohttp
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 from collections import defaultdict
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -46,6 +46,18 @@ AUTHOR_GREETINGS = {
 
 # Default persona when no author is selected
 DEFAULT_PERSONA = "Marcus Aurelius"
+
+# Bot activity statuses for Rich Presence (rotating)
+ACTIVITIES = [
+    discord.Activity(type=discord.ActivityType.watching, name="over your thoughts"),
+    discord.Activity(type=discord.ActivityType.listening, name="Seneca"),
+    discord.Activity(type=discord.ActivityType.playing, name="The Stoic Game"),
+    discord.Activity(type=discord.ActivityType.competing, name="Rome"),
+]
+
+# Footer configuration for embeds
+FOOTER_TEXT = "Powered by Stoic Wisdom • Railway Deployment"
+FOOTER_ICON = "https://i.imgur.com/WQpvKLs.png"  # Greek column icon
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # BOT SETUP
@@ -94,6 +106,23 @@ async def fetch_quotes():
 # EVENTS
 # ═══════════════════════════════════════════════════════════════════════════════
 
+def set_embed_footer(embed: discord.Embed, additional_text: str = None) -> discord.Embed:
+    """Set consistent footer on all embeds with optional additional text."""
+    if additional_text:
+        footer_text = f"{additional_text} | {FOOTER_TEXT}"
+    else:
+        footer_text = FOOTER_TEXT
+    embed.set_footer(text=footer_text, icon_url=FOOTER_ICON)
+    return embed
+
+
+@tasks.loop(minutes=5)
+async def rotate_activity():
+    """Rotate the bot's Rich Presence activity every 5 minutes."""
+    activity = random.choice(ACTIVITIES)
+    await bot.change_presence(activity=activity)
+
+
 @bot.event
 async def on_ready():
     """Called when the bot successfully connects to Discord."""
@@ -102,6 +131,15 @@ async def on_ready():
     print(f"🐍 Python version: {os.sys.version}")
     print("📖 Fetching Stoic quotes...")
     await fetch_quotes()
+    
+    # Set initial activity and start rotation
+    initial_activity = random.choice(ACTIVITIES)
+    await bot.change_presence(activity=initial_activity)
+    print(f"🎮 Activity set: {initial_activity.type.name} {initial_activity.name}")
+    
+    if not rotate_activity.is_running():
+        rotate_activity.start()
+    
     print("🏛️ Stoic Quote Bot is ready!")
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -132,7 +170,7 @@ async def list_authors(ctx):
     
     # Show current persona
     current = user_personas.get(ctx.author.id, DEFAULT_PERSONA)
-    embed.set_footer(text=f"Your current persona: {current}")
+    set_embed_footer(embed, f"Your current persona: {current}")
     
     await ctx.send(embed=embed)
 
@@ -175,7 +213,7 @@ async def set_persona(ctx, *, author_name: str = None):
         description=greeting,
         color=discord.Color.purple()
     )
-    embed.set_footer(text=f"Use !quote to receive wisdom from {matching_author}")
+    set_embed_footer(embed, f"Use !quote to receive wisdom from {matching_author}")
     
     await ctx.send(embed=embed)
 
@@ -206,7 +244,7 @@ async def get_quote(ctx):
         color=discord.Color.blue()
     )
     embed.set_author(name=f"📜 {current_author}")
-    embed.set_footer(text="Use !quote for another, or !persona to change philosopher")
+    set_embed_footer(embed, "Use !quote for another, or !persona to change philosopher")
     
     await ctx.send(embed=embed)
 
@@ -227,7 +265,7 @@ async def random_quote(ctx):
         color=discord.Color.teal()
     )
     embed.set_author(name=f"📜 {author}")
-    embed.set_footer(text="Use !persona to follow this philosopher")
+    set_embed_footer(embed, "Use !persona to follow this philosopher")
     
     await ctx.send(embed=embed)
 
@@ -256,7 +294,7 @@ async def help_command(ctx):
     
     # Show current persona
     current = user_personas.get(ctx.author.id, DEFAULT_PERSONA)
-    embed.set_footer(text=f"Your current persona: {current}")
+    set_embed_footer(embed, f"Your current persona: {current}")
     
     await ctx.send(embed=embed)
 
@@ -284,6 +322,7 @@ async def info(ctx):
     total_quotes = sum(len(q) for q in quotes_by_author.values())
     embed.add_field(name="Total Quotes", value=str(total_quotes), inline=True)
     embed.add_field(name="Philosophers", value=str(len(quotes_by_author)), inline=True)
+    set_embed_footer(embed)
     
     await ctx.send(embed=embed)
 
