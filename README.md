@@ -8,10 +8,12 @@ A Discord bot that dispenses Stoic wisdom from **Marcus Aurelius**, **Seneca**, 
 ## ✨ Features
 
 - **100 Quotes** - Fetches and caches quotes from [stoic-quotes.com](https://stoic-quotes.com) on startup
-- **Grouped by Author** - Quotes organized by philosopher for easy selection
-- **Persona System** - Select a philosopher and receive wisdom in their voice
-- **Styled Greetings** - Each philosopher greets you in their unique style
-- **Beautiful Embeds** - Rich Discord embeds for a polished experience
+- **Philosopher Personas** - Select your favorite philosopher (Marcus Aurelius, Seneca, or Epictetus) and receive wisdom in their voice
+- **Rich Presence** - Dynamic activity status that rotates every 5 minutes, showcasing philosophical themes
+- **Philosopher Biographies** - Detailed historical information about each philosopher with their teachings and legacy
+- **Welcome Messages** - Automatic personalized greetings when the bot joins a new server
+- **Consistent Branding** - Roman-themed gold/bronze color scheme across all embeds with custom footers
+- **Beautiful Embeds** - Styled Discord embeds with philosopher emojis and rich formatting
 
 ---
 
@@ -19,13 +21,14 @@ A Discord bot that dispenses Stoic wisdom from **Marcus Aurelius**, **Seneca**, 
 
 | Command | Description |
 |---------|-------------|
-| `!authors` | List all available philosophers and their quote counts |
-| `!persona <name>` | Select a philosopher persona (e.g., `!persona Marcus`) |
+| `!authors` | List all available philosophers and their quote counts with sample wisdom |
+| `!persona <name>` | Select a philosopher persona (e.g., `!persona Marcus` or `!persona Seneca`) |
 | `!quote` | Get a random quote from your selected philosopher |
 | `!random` | Get a random quote from any philosopher |
-| `!help` | Show all available commands |
+| `!bio` | Learn about your selected philosopher's life, teachings, and historical significance |
+| `!help` | Show all available commands and current persona |
 | `!ping` | Check bot latency |
-| `!info` | Display bot information |
+| `!info` | Display bot information including quote statistics and connected servers |
 
 ---
 
@@ -90,14 +93,20 @@ discord-bot-python-test/
 
 ## 🏛️ The Philosophers
 
-### Marcus Aurelius (121-180 AD)
-Roman Emperor and Stoic philosopher. His "Meditations" are private notes to himself on Stoic philosophy.
+### 👑 Marcus Aurelius (121-180 AD)
+**Roman Emperor & Stoic Philosopher**
 
-### Seneca (4 BC - 65 AD)
-Roman Stoic philosopher, statesman, and dramatist. Advisor to Emperor Nero. Known for his letters on ethics and natural philosophy.
+Roman Emperor and Stoic philosopher. His *Meditations* are private notes to himself on Stoic philosophy, written during military campaigns. He is considered the last of the Five Good Emperors. His reflections on duty, virtue, and acceptance remain deeply influential today.
 
-### Epictetus (50-135 AD)
-Born a slave, became one of the most influential Stoic philosophers. His teachings focus on what is "in our control" vs what is not.
+### 📝 Seneca (4 BC - 65 AD)
+**Stoic Philosopher & Statesman**
+
+Roman Stoic philosopher, statesman, and dramatist. Advisor to Emperor Nero. Known for his letters on ethics and natural philosophy. His works on anger, tranquility, and the shortness of life remain influential. He believed philosophy should be practical and improve how we live.
+
+### ⛓️ Epictetus (50-135 AD)
+**Stoic Philosopher & Former Slave**
+
+Born a slave, became one of the most influential Stoic philosophers. His teachings focus on what is *in our control* vs what is not. His philosophy emphasizes acceptance and inner freedom. He taught that while we cannot control external events, we have complete control over our judgments and responses.
 
 ---
 
