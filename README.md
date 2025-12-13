@@ -2,6 +2,9 @@
 
 A Discord bot that dispenses Stoic wisdom from **Marcus Aurelius**, **Seneca**, and **Epictetus**. Users can select a philosopher "persona" and receive quotes in that philosopher's unique style.
 
+![Gemini_Generated_Image_scwwijscwwijscww](https://github.com/user-attachments/assets/b60f4038-0853-48b0-af93-77a853a84a10)
+
+
 ## ✨ Features
 
 - **100 Quotes** - Fetches and caches quotes from [stoic-quotes.com](https://stoic-quotes.com) on startup
