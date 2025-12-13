@@ -58,6 +58,31 @@ ACTIVITIES = [
 # Footer configuration for embeds
 FOOTER_TEXT = "🚂 Powered by Stoic Wisdom • Railway Deployment"
 
+# Uniform embed color theme
+EMBED_COLOR = discord.Color.from_rgb(212, 175, 55)  # Gold/Bronze - Roman theme
+
+# Philosopher biographies
+AUTHOR_BIOS = {
+    "Marcus Aurelius": {
+        "years": "121-180 AD",
+        "title": "Roman Emperor & Stoic Philosopher",
+        "description": "Roman Emperor and Stoic philosopher. His *Meditations* are private notes to himself on Stoic philosophy, written during military campaigns. He is considered the last of the Five Good Emperors.",
+        "emoji": "👑",
+    },
+    "Seneca": {
+        "years": "4 BC - 65 AD",
+        "title": "Stoic Philosopher & Statesman",
+        "description": "Roman Stoic philosopher, statesman, and dramatist. Advisor to Emperor Nero. Known for his letters on ethics and natural philosophy. His works on anger, tranquility, and the shortness of life remain influential.",
+        "emoji": "📝",
+    },
+    "Epictetus": {
+        "years": "50-135 AD",
+        "title": "Stoic Philosopher & Former Slave",
+        "description": "Born a slave, became one of the most influential Stoic philosophers. His teachings focus on what is *in our control* vs what is not. His philosophy emphasizes acceptance and inner freedom.",
+        "emoji": "⛓️",
+    },
+}
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # BOT SETUP
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -141,6 +166,58 @@ async def on_ready():
     
     print("🏛️ Stoic Quote Bot is ready!")
 
+
+@bot.event
+async def on_guild_join(guild):
+    """Called when the bot joins a new server. Greets with random persona and shows commands."""
+    # Find the first text channel we can send to
+    target_channel = None
+    for channel in guild.text_channels:
+        if channel.permissions_for(guild.me).send_messages:
+            target_channel = channel
+            break
+    
+    if not target_channel:
+        return
+    
+    # Pick a random philosopher persona for the greeting
+    philosophers = list(AUTHOR_GREETINGS.keys())
+    chosen_philosopher = random.choice(philosophers)
+    greeting = random.choice(AUTHOR_GREETINGS[chosen_philosopher])
+    bio = AUTHOR_BIOS.get(chosen_philosopher, {})
+    
+    # Create welcome embed
+    embed = discord.Embed(
+        title=f"🏛️ Hail, {guild.name}!",
+        description=greeting,
+        color=EMBED_COLOR
+    )
+    
+    # Add quick start guide
+    embed.add_field(
+        name="📜 Quick Start",
+        value=(
+            "`!quote` — Receive wisdom from your philosopher\n"
+            "`!persona <name>` — Choose your guide\n"
+            "`!bio` — Learn about your philosopher\n"
+            "`!random` — Random wisdom from any philosopher\n"
+            "`!help` — See all commands"
+        ),
+        inline=False
+    )
+    
+    # Add available philosophers
+    philosophers_list = " • ".join([f"{AUTHOR_BIOS.get(p, {}).get('emoji', '📜')} {p}" for p in philosophers])
+    embed.add_field(
+        name="🎭 Available Philosophers",
+        value=philosophers_list,
+        inline=False
+    )
+    
+    set_embed_footer(embed, f"Speaking as {chosen_philosopher}")
+    
+    await target_channel.send(embed=embed)
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # COMMANDS
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -155,7 +232,7 @@ async def list_authors(ctx):
     embed = discord.Embed(
         title="🏛️ Available Philosophers",
         description="Choose a philosopher persona to receive their wisdom.\nUse `!persona <name>` to select one.",
-        color=discord.Color.gold()
+        color=EMBED_COLOR
     )
     
     for author, quotes in sorted(quotes_by_author.items()):
@@ -210,7 +287,7 @@ async def set_persona(ctx, *, author_name: str = None):
     embed = discord.Embed(
         title=f"🎭 Persona Changed",
         description=greeting,
-        color=discord.Color.purple()
+        color=EMBED_COLOR
     )
     set_embed_footer(embed, f"Use !quote to receive wisdom from {matching_author}")
     
@@ -240,7 +317,7 @@ async def get_quote(ctx):
     # Create a beautiful embed
     embed = discord.Embed(
         description=f"*\"{quote}\"*",
-        color=discord.Color.blue()
+        color=EMBED_COLOR
     )
     embed.set_author(name=f"📜 {current_author}")
     set_embed_footer(embed, "Use !quote for another, or !persona to change philosopher")
@@ -261,7 +338,7 @@ async def random_quote(ctx):
     
     embed = discord.Embed(
         description=f"*\"{quote}\"*",
-        color=discord.Color.teal()
+        color=EMBED_COLOR
     )
     embed.set_author(name=f"📜 {author}")
     set_embed_footer(embed, "Use !persona to follow this philosopher")
@@ -275,12 +352,13 @@ async def help_command(ctx):
     embed = discord.Embed(
         title="🏛️ Stoic Quote Bot Commands",
         description="Dispense wisdom from the great Stoic philosophers",
-        color=discord.Color.green()
+        color=EMBED_COLOR
     )
     
     commands_list = [
         ("!authors", "List all available philosophers and their quote counts"),
         ("!persona <name>", "Select a philosopher persona (e.g., `!persona Marcus`)"),
+        ("!bio", "Learn about your selected philosopher's life and teachings"),
         ("!quote", "Get a random quote from your selected philosopher"),
         ("!random", "Get a random quote from any philosopher"),
         ("!help", "Show this help message"),
@@ -298,11 +376,57 @@ async def help_command(ctx):
     await ctx.send(embed=embed)
 
 
+@bot.command(name="bio")
+async def bio_command(ctx):
+    """Display biography of your selected philosopher."""
+    # Get user's current persona
+    current_author = user_personas.get(ctx.author.id, DEFAULT_PERSONA)
+    bio = AUTHOR_BIOS.get(current_author, {})
+    
+    if not bio:
+        await ctx.send(f"❌ No biography available for {current_author}.")
+        return
+    
+    embed = discord.Embed(
+        title=f"{bio.get('emoji', '📜')} {current_author}",
+        description=f"**{bio.get('title', 'Stoic Philosopher')}**\n*{bio.get('years', 'Unknown')}*",
+        color=EMBED_COLOR
+    )
+    
+    embed.add_field(
+        name="📖 Biography",
+        value=bio.get('description', 'No description available.'),
+        inline=False
+    )
+    
+    # Add a sample quote if available
+    author_quotes = quotes_by_author.get(current_author, [])
+    if author_quotes:
+        sample_quote = random.choice(author_quotes)
+        if len(sample_quote) > 200:
+            sample_quote = sample_quote[:197] + "..."
+        embed.add_field(
+            name="💬 Sample Wisdom",
+            value=f"*\"{sample_quote}\"*",
+            inline=False
+        )
+    
+    set_embed_footer(embed, "Use !persona to switch philosophers")
+    
+    await ctx.send(embed=embed)
+
+
 @bot.command(name="ping")
 async def ping(ctx):
     """Simple ping command to test if bot is responsive."""
     latency = round(bot.latency * 1000)
-    await ctx.send(f"🏓 Pong! Latency: {latency}ms")
+    embed = discord.Embed(
+        title="🏓 Pong!",
+        description=f"Latency: **{latency}ms**",
+        color=EMBED_COLOR
+    )
+    set_embed_footer(embed)
+    await ctx.send(embed=embed)
 
 
 @bot.command(name="info")
@@ -311,7 +435,7 @@ async def info(ctx):
     embed = discord.Embed(
         title="🏛️ Stoic Quote Bot Information",
         description="A Discord bot that dispenses Stoic wisdom",
-        color=discord.Color.blue()
+        color=EMBED_COLOR
     )
     embed.add_field(name="Python Version", value=os.sys.version.split()[0], inline=True)
     embed.add_field(name="Discord.py Version", value=discord.__version__, inline=True)
