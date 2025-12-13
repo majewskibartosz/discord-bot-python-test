@@ -56,8 +56,7 @@ ACTIVITIES = [
 ]
 
 # Footer configuration for embeds
-FOOTER_TEXT = "Powered by Stoic Wisdom • Railway Deployment"
-FOOTER_ICON = "https://i.imgur.com/WQpvKLs.png"  # Greek column icon
+FOOTER_TEXT = "🚂 Powered by Stoic Wisdom • Railway Deployment"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # BOT SETUP
@@ -112,7 +111,7 @@ def set_embed_footer(embed: discord.Embed, additional_text: str = None) -> disco
         footer_text = f"{additional_text} | {FOOTER_TEXT}"
     else:
         footer_text = FOOTER_TEXT
-    embed.set_footer(text=footer_text, icon_url=FOOTER_ICON)
+    embed.set_footer(text=footer_text)
     return embed
 
 
