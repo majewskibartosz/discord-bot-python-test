@@ -44,7 +44,7 @@ AUTHOR_GREETINGS = {
     ],
 }
 
-# Default persona when no author is selected
+# Default persona when no author is selected (will be set on bot startup/guild join)
 DEFAULT_PERSONA = "Marcus Aurelius"
 
 # Bot activity statuses for Rich Presence (rotating)
@@ -170,6 +170,8 @@ async def on_ready():
 @bot.event
 async def on_guild_join(guild):
     """Called when the bot joins a new server. Greets with random persona and shows all commands."""
+    global DEFAULT_PERSONA
+
     # Find the first text channel we can send to
     target_channel = None
     for channel in guild.text_channels:
@@ -180,9 +182,11 @@ async def on_guild_join(guild):
     if not target_channel:
         return
 
-    # Pick a random philosopher persona for the greeting (similar to !persona command)
+    # Pick a random philosopher persona and set as default
     philosophers = list(AUTHOR_GREETINGS.keys())
     chosen_philosopher = random.choice(philosophers)
+    DEFAULT_PERSONA = chosen_philosopher  # Set as new default for all users
+
     greeting = random.choice(AUTHOR_GREETINGS[chosen_philosopher])
     bio = AUTHOR_BIOS.get(chosen_philosopher, {})
 
