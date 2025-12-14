@@ -12,9 +12,14 @@ A Discord bot that dispenses Stoic wisdom from **Marcus Aurelius**, **Seneca**, 
 
 - **100 Quotes** - Fetches and caches quotes from [stoic-quotes.com](https://stoic-quotes.com) on startup
 - **Philosopher Personas** - Select your favorite philosopher (Marcus Aurelius, Seneca, or Epictetus) and receive wisdom in their voice
+  - Each user has their own independent persona selection
+  - When bot joins a server, it randomly selects a philosopher as the default persona for new users
 - **Rich Presence** - Dynamic activity status that rotates every 5 minutes, showcasing philosophical themes
 - **Philosopher Biographies** - Detailed historical information about each philosopher with their teachings and legacy
-- **Welcome Messages** - Automatic personalized greetings when the bot joins a new server
+- **Welcome Messages** - Automatic personalized greetings with full command list when the bot joins a new server
+  - Bot greets in a random philosopher's voice
+  - Displays all 8 commands organized by category
+  - Lists all available philosophers
 - **Consistent Branding** - Roman-themed gold/bronze color scheme across all embeds with custom footers
 - **Beautiful Embeds** - Styled Discord embeds with philosopher emojis and rich formatting
 
