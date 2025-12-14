@@ -64,29 +64,32 @@ cd discord-bot-python-test
 
 ---
 
-## 🐍 Python Version
+## 🐍 Python Version & Deployment
 
-This project runs on **Python 3.11** (or newer) and uses Railway's built-in Python support.
+This project uses a **Dockerfile** to specify **Python 3.11** and avoid SSL/mise certificate verification errors.
 
-### About `.python-version` Files
+### Why Docker?
 
-We do **NOT** include a `.python-version` file because it triggers `mise` (version manager) which can cause SSL certificate verification errors in some CI/CD environments like Railway:
+Railway's Railpack attempts to use `mise` for Python version management, which causes SSL errors:
 
 ```
 mise ERROR error:0A000086:SSL routines:tls_post_process_server_certificate:
 certificate verify failed (hostname mismatch)
 ```
 
-**Solution**: Let Railway use its default Python installation instead. No action needed - the deployment will work automatically.
+**Solution**: The included `Dockerfile` explicitly uses Python 3.11 and bypasses Railpack completely.
 
-### Python 3.13 Note
+### Deployment
 
-If you need to use this bot with Python 3.13+, you may encounter:
-```
-ModuleNotFoundError: No module named 'audioop'
-```
+Railway automatically detects and uses the `Dockerfile` when present:
 
-See the [fixes/](./fixes/) folder for solutions (add `audioop-lts` to requirements or use the provided `mise.toml`).
+1. Push to GitHub
+2. Create new Railway project from repo
+3. Railway detects `Dockerfile` automatically
+4. Add environment variable: `DISCORD_TOKEN=your_bot_token`
+5. Railway builds using Docker and deploys!
+
+No manual configuration needed - it just works.
 
 ---
 
@@ -96,6 +99,8 @@ See the [fixes/](./fixes/) folder for solutions (add `audioop-lts` to requiremen
 discord-bot-python-test/
 ├── main.py                          # Stoic Quote Bot code
 ├── requirements.txt                 # py-cord + aiohttp dependencies
+├── Dockerfile                       # Docker configuration for Python 3.11 (used by Railway)
+├── .dockerignore                    # Docker build optimization
 ├── README.md                        # This file
 ├── .gitignore                       # Standard Python gitignore
 └── fixes/                           # Alternative configurations for different environments
