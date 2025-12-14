@@ -169,53 +169,70 @@ async def on_ready():
 
 @bot.event
 async def on_guild_join(guild):
-    """Called when the bot joins a new server. Greets with random persona and shows commands."""
+    """Called when the bot joins a new server. Greets with random persona and shows all commands."""
     # Find the first text channel we can send to
     target_channel = None
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me).send_messages:
             target_channel = channel
             break
-    
+
     if not target_channel:
         return
-    
-    # Pick a random philosopher persona for the greeting
+
+    # Pick a random philosopher persona for the greeting (similar to !persona command)
     philosophers = list(AUTHOR_GREETINGS.keys())
     chosen_philosopher = random.choice(philosophers)
     greeting = random.choice(AUTHOR_GREETINGS[chosen_philosopher])
     bio = AUTHOR_BIOS.get(chosen_philosopher, {})
-    
-    # Create welcome embed
+
+    # Create main welcome embed with greeting
     embed = discord.Embed(
         title=f"🏛️ Hail, {guild.name}!",
         description=greeting,
         color=EMBED_COLOR
     )
-    
-    # Add quick start guide
+
+    # Add all available commands in nicely formatted sections
     embed.add_field(
-        name="📜 Quick Start",
+        name="📜 Philosopher Selection",
         value=(
-            "`!quote` — Receive wisdom from your philosopher\n"
-            "`!persona <name>` — Choose your guide\n"
-            "`!bio` — Learn about your philosopher\n"
-            "`!random` — Random wisdom from any philosopher\n"
-            "`!help` — See all commands"
+            "`!authors` — List all philosophers with sample quotes\n"
+            "`!persona <name>` — Choose your philosopher guide (e.g., `!persona Marcus`)\n"
+            "`!bio` — Learn about your selected philosopher's life and teachings"
         ),
         inline=False
     )
-    
-    # Add available philosophers
+
+    embed.add_field(
+        name="💬 Quote Commands",
+        value=(
+            "`!quote` — Get a random quote from your selected philosopher\n"
+            "`!random` — Get a random quote from any philosopher"
+        ),
+        inline=False
+    )
+
+    embed.add_field(
+        name="ℹ️ Information",
+        value=(
+            "`!help` — Display all available commands\n"
+            "`!ping` — Check bot latency\n"
+            "`!info` — Bot statistics and information"
+        ),
+        inline=False
+    )
+
+    # Add available philosophers list
     philosophers_list = " • ".join([f"{AUTHOR_BIOS.get(p, {}).get('emoji', '📜')} {p}" for p in philosophers])
     embed.add_field(
         name="🎭 Available Philosophers",
         value=philosophers_list,
         inline=False
     )
-    
-    set_embed_footer(embed, f"Speaking as {chosen_philosopher}")
-    
+
+    set_embed_footer(embed, f"Speaking as {chosen_philosopher} • Use !help for more details")
+
     await target_channel.send(embed=embed)
 
 # ═══════════════════════════════════════════════════════════════════════════════
