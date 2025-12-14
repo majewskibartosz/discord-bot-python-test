@@ -2,14 +2,16 @@
 Stoic Quote Discord Bot - Railway Deployment Demo
 
 A Discord bot that dispenses Stoic wisdom from Marcus Aurelius, Seneca, and Epictetus.
-Users can select a philosopher "persona" and receive quotes in that philosopher's style.
+Users can select a philosopher "persona" and receive quotes in that philosopher's unique style.
 
 Features:
-- Fetches 100 quotes from stoic-quotes.com on startup
-- Groups quotes by author
-- Allows users to select a philosopher persona
-- Provides quotes from the selected philosopher
-- Simulates the philosopher's style in greeting messages
+- Fetches 100 quotes from stoic-quotes.com on startup and groups by author
+- Rich Presence with rotating activities that change every 5 minutes
+- Philosopher persona system with independent per-user selections
+- Detailed philosopher biographies with historical context
+- Smart guild welcome system with random persona selection and full command reference
+- Beautiful embed messages with Roman-themed gold/bronze color scheme
+- 8 interactive commands organized by functionality
 """
 
 import os
