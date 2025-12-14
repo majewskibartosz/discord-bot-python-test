@@ -64,16 +64,29 @@ cd discord-bot-python-test
 
 ---
 
-## 🐍 Python Version (Important!)
+## 🐍 Python Version
 
-This project includes a `.python-version` file set to **Python 3.12** to avoid the `audioop` error on Python 3.13.
+This project runs on **Python 3.11** (or newer) and uses Railway's built-in Python support.
 
-If you experience the error:
+### About `.python-version` Files
+
+We do **NOT** include a `.python-version` file because it triggers `mise` (version manager) which can cause SSL certificate verification errors in some CI/CD environments like Railway:
+
+```
+mise ERROR error:0A000086:SSL routines:tls_post_process_server_certificate:
+certificate verify failed (hostname mismatch)
+```
+
+**Solution**: Let Railway use its default Python installation instead. No action needed - the deployment will work automatically.
+
+### Python 3.13 Note
+
+If you need to use this bot with Python 3.13+, you may encounter:
 ```
 ModuleNotFoundError: No module named 'audioop'
 ```
 
-See the [fixes/](./fixes/) folder for solutions.
+See the [fixes/](./fixes/) folder for solutions (add `audioop-lts` to requirements or use the provided `mise.toml`).
 
 ---
 
@@ -81,15 +94,14 @@ See the [fixes/](./fixes/) folder for solutions.
 
 ```
 discord-bot-python-test/
-├── main.py              # Stoic Quote Bot code
-├── requirements.txt     # py-cord + aiohttp
-├── .python-version      # Pins Python to 3.12
-├── README.md           # This file
-├── .gitignore          # Standard Python gitignore
-└── fixes/              # Alternative fix options
-    ├── .python-version
-    ├── requirements-with-audioop-lts.txt
-    └── mise.toml
+├── main.py                          # Stoic Quote Bot code
+├── requirements.txt                 # py-cord + aiohttp dependencies
+├── README.md                        # This file
+├── .gitignore                       # Standard Python gitignore
+└── fixes/                           # Alternative configurations for different environments
+    ├── .python-version              # Pin Python to specific version (triggers mise)
+    ├── requirements-with-audioop-lts.txt  # Alternative for Python 3.13+
+    └── mise.toml                    # Mise configuration (alternative to .python-version)
 ```
 
 ---
