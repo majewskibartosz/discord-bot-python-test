@@ -1,8 +1,11 @@
 # 🏛️ Stoic Quote Discord Bot
 
+![Gemini_Generated_Image_scwwijscwwijscww](https://github.com/user-attachments/assets/b60f4038-0853-48b0-af93-77a853a84a10)
+
+
 A Discord bot that dispenses Stoic wisdom from **Marcus Aurelius**, **Seneca**, and **Epictetus**. Users can select a philosopher "persona" and receive quotes in that philosopher's unique style.
 
-![Gemini_Generated_Image_scwwijscwwijscww](https://github.com/user-attachments/assets/b60f4038-0853-48b0-af93-77a853a84a10)
+[** Install Link - Use this link to add Stouc Quote Bot to your Discord server.**](https://discord.com/oauth2/authorize?client_id=1449043709906784486)
 
 
 ## ✨ Features
